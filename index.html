@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eef2ff;
+      display: flex;
+      justify-content: center;
+      padding: 40px 10px;
+    }
+
+    .chatbox {
+      width: 350px;
+      max-width: 100%;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px #ccc;
+    }
+
+    h2 { text-align: center; color: #4338ca; }
+
+    #messages {
+      height: 300px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 12px;
+    }
+
+    .user { color: #1d4ed8; }
+    .bot { color: #15803d; }
+
+    .controls { display: flex; gap: 5px; }
+
+    input {
+      min-width: 0;
+      flex: 1;
+      padding: 10px;
+    }
+
+    button {
+      padding: 10px;
+      background: #4338ca;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="chatbox">
+    <h2>🤖 AI Chatbot</h2>
+    <div id="messages">
+      <p class="bot"><b>Bot:</b> Hello! How can I help you?</p>
+    </div>
+
+    <div class="controls">
+      <input id="question" placeholder="Ask me something...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    function getAnswer(question) {
+      const q = question.toLowerCase();
+
+      const faqs = [
+        { keys: ["hello", "hi", "hey"],
+          answer: "Hello! Welcome to our chatbot." },
+        { keys: ["your name", "who are you"],
+          answer: "I am a website assistant chatbot." },
+        { keys: ["courses", "course"],
+          answer: "We provide information about available courses." },
+        { keys: ["contact", "email"],
+          answer: "Please visit our Contact Us page for details." },
+        { keys: ["help", "support"],
+          answer: "Sure! Please tell me what help you need." },
+        { keys: ["thank"],
+          answer: "You're welcome!" },
+        { keys: ["bye"],
+          answer: "Goodbye! Have a nice day." }
+      ];
+
+      for (const faq of faqs) {
+        if (faq.keys.some(key => q.includes(key))) {
+          return faq.answer;
+        }
+      }
+
+      return "Sorry, I don't know that answer yet. Please try another question.";
+    }
+
+    function sendMessage() {
+      const input = document.getElementById("question");
+      const messages = document.getElementById("messages");
+      const question = input.value.trim();
+
+      if (!question) return;
+
+      const userMessage = document.createElement("p");
+      userMessage.className = "user";
+      userMessage.textContent = "You: " + question;
+      messages.appendChild(userMessage);
+
+      const botMessage = document.createElement("p");
+      botMessage.className = "bot";
+      botMessage.textContent = "Bot: " + getAnswer(question);
+      messages.appendChild(botMessage);
+
+      input.value = "";
+      messages.scrollTop = messages.scrollHeight;
+      input.focus();
+    }
+
+    document.getElementById("question")
+      .addEventListener("keydown", function(event) {
+        if (event.key === "Enter") sendMessage();
+      });
+  </script>
+</body>
+</html>
